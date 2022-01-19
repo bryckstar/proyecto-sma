@@ -5,7 +5,7 @@
  */
 package BL;
 
-import Clases.RecursosAprendizaje;
+import objetos.RecursosAprendizaje;
 import DAT.DATConexion;
 import DAT.DATRecursos_Aprendizaje;
 import java.sql.ResultSet;
@@ -19,6 +19,10 @@ import java.util.ArrayList;
 public class BLRecursos_Aprendizaje {
     DATRecursos_Aprendizaje objDatRA = new DATRecursos_Aprendizaje();
     DATConexion objDATConexion = new DATConexion();
+
+    public BLRecursos_Aprendizaje() {
+    }
+    
     
     public ArrayList<RecursosAprendizaje> consultarRA(String mensaje) 
             throws SQLException, ClassNotFoundException{
@@ -38,6 +42,8 @@ public class BLRecursos_Aprendizaje {
         this.cerrarConexion();
         return lista;
     };
+    
+    
     
     public void cerrarConexion() throws SQLException {
         objDATConexion.CerrarConexion();

@@ -3,7 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Clases;
+package objetos;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 /**
  *
@@ -70,7 +74,17 @@ public class RecursosAprendizaje {
         this.categoria = categoria;
     }
     
-    
+    public String sinResultados(String ruta){
+        String datos = "";
+        try{
+            ObjectInputStream read = new ObjectInputStream(new FileInputStream(ruta));
+            datos = (String) read.readObject();
+            read.close();
+        }catch (IOException | ClassNotFoundException e){
+            System.out.println(e.getMessage());
+        }
+        return datos;
+    }
     
     
 }
