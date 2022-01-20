@@ -6,8 +6,10 @@
 package objetos;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 
 /**
  *
@@ -19,6 +21,7 @@ public class RecursosAprendizaje {
     private String detalle_recurso = "";
     private String enlace_recurso = "";
     private String categoria = "";
+    private LeerRepositorioRA repositorio;
 
     public RecursosAprendizaje() {
     }
@@ -86,5 +89,10 @@ public class RecursosAprendizaje {
         return datos;
     }
     
-    
+    public ArrayList<String> buscarRA(String recursosAprendizaje) throws FileNotFoundException{
+        repositorio = new LeerRepositorioRA();
+        repositorio.abrirArchivo("Repositorio de RA.txt");
+        ArrayList<String> lista = repositorio.leer_informacion(recursosAprendizaje);
+        return lista;
+    }
 }
