@@ -3,11 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Andres/docs/CICLO%209/IA/Proyecto/proyecto-sma/src/objetos/RecursosAprendizaje.java</file>
             <file>file:/D:/Andres/docs/CICLO%209/IA/Proyecto/proyecto-sma/src/smavark/SMAVARK.java</file>
             <file>file:/D:/Andres/docs/CICLO%209/IA/Proyecto/proyecto-sma/src/agentes/AgenteGestor.java</file>
             <file>file:/D:/Andres/docs/CICLO%209/IA/Proyecto/proyecto-sma/src/agentes/AgenteDetector.java</file>
             <file>file:/D:/Andres/docs/CICLO%209/IA/Proyecto/proyecto-sma/src/BL/BLRecursos_Aprendizaje.java</file>
+            <file>file:/D:/Andres/docs/CICLO%209/IA/Proyecto/proyecto-sma/src/DAT/DATConexion.java</file>
+            <file>file:/D:/Andres/docs/CICLO%209/IA/Proyecto/proyecto-sma/src/DAT/DATRecursos_Aprendizaje.java</file>
             <file>file:/D:/Andres/docs/CICLO%209/IA/Proyecto/proyecto-sma/src/gui/GUI_principal.java</file>
         </group>
     </open-files>

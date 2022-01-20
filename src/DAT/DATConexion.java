@@ -17,7 +17,7 @@ public class DATConexion
             String driver = "com.mysql.jdbc.Driver";
             String url = "jdbc:mysql://localhost:3306/recursos_educativos";
             Class.forName(driver);
-            return DriverManager.getConnection(url,"root","");
+            return DriverManager.getConnection(url,"root","root");
     };
     
     public Connection AbrirConexion() throws ClassNotFoundException, SQLException

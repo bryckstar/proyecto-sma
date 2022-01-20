@@ -5,48 +5,55 @@
  */
 package agentes;
 
-import gui.GUI_principal;
+import BL.BLRecursos_Aprendizaje;
 import objetos.RecursosAprendizaje;
 import jade.core.*;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.core.behaviours.*;
-import jade.lang.acl.UnreadableException;
+import java.io.IOException;
+import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Bryan
  */
 public class AgenteGestor extends Agent {
-
-    GUI_principal gui;
-    String txtBusqueda;
-    RecursosAprendizaje ra = new RecursosAprendizaje();
-
-    public void setup() {
-        gui = new GUI_principal(this);
-        addBehaviour(new CyclicBehaviour() {
+    
+    BLRecursos_Aprendizaje objRA  = new BLRecursos_Aprendizaje();
+    ArrayList <RecursosAprendizaje> lista;
+    private String mensaje;
+    
+    
+    @Override
+     public void setup(){
+        addBehaviour (new CyclicBehaviour() {
+            @Override
             public void action() {
                 ACLMessage aclMessage = receive();
-                if (aclMessage != null) {
+                if (aclMessage != null){
+                    mensaje = aclMessage.getContent();
+                    System.out.println(getLocalName()+": se recibió el mensaje: " + mensaje);
                     try {
-                        ArrayList<RecursosAprendizaje> lista
-                                = (ArrayList<RecursosAprendizaje>) aclMessage.getContentObject();
-                        if (lista.size() > 0) {
-                            System.out.println(getLocalName() + ": recibió datos del Aagente Detector \n\n");
-                            /*gui.establecerLista(Lista)*/
-                        } else {
-                            System.out.println(getLocalName() + ": no recibió los datos del Agente Detector \n\n");
-                            String msm = ra.sinResultados("Sin Resultados.txt").replace("%s", txtBusqueda);
-                            /*gui.sinResultados*/
-                        }
-
-                    } catch (UnreadableException e) {
-                        e.getMessage();
+                        System.out.println(getLocalName() + ": preparación para consultar a la base de datos");
+                        lista = objRA.consultarRA(mensaje);
+                        System.out.println(getLocalName() + ": consulta completa");
+                        aclMessage = new ACLMessage(ACLMessage.INFORM);
+                        aclMessage.setContentObject((Serializable) lista);
+                        aclMessage.addReceiver(new AID("Agente-Detector",AID.ISLOCALNAME));
+                        send(aclMessage);
+                        System.out.println(getLocalName()+": enviando mensaje al agente gestor");
+                        System.out.println("///////////////////////////////////////////////////////////\n");
+                    } catch (SQLException | ClassNotFoundException | IOException ex) {
+                        Logger.getLogger(AgenteGestor.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
         });
     }
+    
 }

@@ -5,59 +5,73 @@
  */
 package agentes;
 
-import BL.BLRecursos_Aprendizaje;
+import gui.GUI_principal;
 import objetos.RecursosAprendizaje;
 import jade.core.*;
-import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.core.behaviours.*;
-import java.io.IOException;
-import java.io.Serializable;
-import java.sql.SQLException;
+import jade.gui.GuiAgent;
+import jade.gui.GuiEvent;
+import jade.lang.acl.UnreadableException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Bryan
  */
-public class AgenteDetector extends Agent {
-    
-    BLRecursos_Aprendizaje objRA  = new BLRecursos_Aprendizaje();
-    ArrayList <RecursosAprendizaje> lista;
-    private String mensaje;
-    
-    
+public class AgenteDetector extends GuiAgent {
+
+    GUI_principal gui;
+    String txtBusqueda;
+    ACLMessage aclMessage;
+    RecursosAprendizaje ra = new RecursosAprendizaje();
+
     @Override
-     public void setup(){
-        addBehaviour (new CyclicBehaviour() {
+    public void setup() {
+        gui = new GUI_principal(this);
+        gui.setVisible(true);
+        addBehaviour(new CyclicBehaviour() {
             @Override
             public void action() {
                 ACLMessage aclMessage = receive();
-                if (aclMessage != null){
-                    mensaje = aclMessage.getContent();
-                    System.out.println(getLocalName()+": se recibió el mensaje: " + mensaje);
+                if (aclMessage != null) {
                     try {
-                        System.out.println(getLocalName() + ": preparación para consultar a la base de datos");
-                        lista = objRA.consultarRA(mensaje);
-                        System.out.println(getLocalName() + ": consulta completa");
-                        aclMessage = new ACLMessage(ACLMessage.INFORM);
-                        aclMessage.setContentObject((Serializable) lista);
-                        aclMessage.addReceiver(new AID("Agente-Gestor",AID.ISLOCALNAME));
-                        send(aclMessage);
-                        System.out.println(getLocalName()+": enviando mensaje al agente gestor");
-                        System.out.println("///////////////////////////////////////////////////////////\n");
-                    } catch (SQLException ex) {
-                        Logger.getLogger(AgenteDetector.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(AgenteDetector.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
-                        Logger.getLogger(AgenteDetector.class.getName()).log(Level.SEVERE, null, ex);
+                        ArrayList<RecursosAprendizaje> lista
+                                = (ArrayList<RecursosAprendizaje>) aclMessage.getContentObject();
+                        if (lista.size() > 0) {
+                            System.out.println(getLocalName() + ": recibió datos del Agente Gestor \n\n");
+                            gui.establecerLista(lista);
+                        } else {
+                            System.out.println(getLocalName() + ": no recibió los datos del Agente Gestor \n\n");
+                            String msm = ra.sinResultados("Sin Resultados.txt").replace("%s", txtBusqueda);
+                            gui.sinResultados();
+                        }
+
+                    } catch (UnreadableException e) {
+                        e.getMessage();
                     }
                 }
             }
         });
     }
     
+    @Override
+    protected void onGuiEvent(GuiEvent ge){
+        int tipoElemento = ge.getType();
+        if (tipoElemento == 1){
+            addBehaviour(new OneShotBehaviour(){
+                @Override
+                public void action(){
+                    txtBusqueda = (String) ge.getParameter(0);
+                    System.out.println(getLocalName()+": obtuvo el siguiente mensaje: "+txtBusqueda);
+                    aclMessage = new ACLMessage(ACLMessage.INFORM);
+                    aclMessage.setContent(txtBusqueda.toLowerCase());
+                    aclMessage.addReceiver(new AID("Agente-Gestor",AID.ISLOCALNAME));
+                    send(aclMessage);
+                    System.out.println(getLocalName()+": listo para enviar mensaje al Agente-Gestor");
+                    System.out.println("///////////////////////////////////////////////////////////\n");
+                }
+            });
+        }
+    }
 }

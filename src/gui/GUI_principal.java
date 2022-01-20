@@ -5,24 +5,35 @@
  */
 package gui;
 
-import agentes.AgenteGestor;
+import agentes.AgenteDetector;
+import jade.gui.GuiEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import objetos.RecursosAprendizaje;
 
 /**
  *
  * @author PalaHZ
  */
-public class GUI_principal extends javax.swing.JFrame {
+public class GUI_principal extends javax.swing.JFrame implements ActionListener{
 
     /**
      * Creates new form GUI_principal
      */
+    private AgenteDetector agente;
+    
+    
     public GUI_principal() {
         initComponents();
     }
 
-    public GUI_principal(AgenteGestor aThis) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public GUI_principal(AgenteDetector ag) {
+        initComponents();
+        this.agente = ag;
+        this.jButtonBuscar.addActionListener(this);
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,18 +44,27 @@ public class GUI_principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea = new javax.swing.JTextArea();
+        jComboBoxRecursos = new javax.swing.JComboBox<>();
+        jButtonBuscar = new javax.swing.JButton();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jTextArea.setColumns(20);
+        jTextArea.setRows(5);
+        jScrollPane1.setViewportView(jTextArea);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 320, 160));
+
+        jComboBoxRecursos.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jComboBoxRecursos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Visual", "Lectura", "Auditivo", "Kinestesico" }));
+        getContentPane().add(jComboBoxRecursos, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 170, 40));
+
+        jButtonBuscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButtonBuscar.setText("Buscar");
+        getContentPane().add(jButtonBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 50, 110, 40));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -83,7 +103,35 @@ public class GUI_principal extends javax.swing.JFrame {
             }
         });
     }
+    
+    public void establecerLista(ArrayList<RecursosAprendizaje> lista){
+        String cadena = "";
+        for (int i =0;i<lista.size();i++){
+            cadena = String.format("%s \nNombre: %s\n%s\n%s\n%s\n\n",cadena,
+                    lista.get(i).getTitulo_recurso(),
+                    lista.get(i).getDetalle_recurso(),
+                    lista.get(i).getEnlace_recurso(),
+                    lista.get(i).getCategoria());
+        }
+        this.jTextArea.setText(cadena);
+    }
+    public void sinResultados(){
+        this.jTextArea.setText("No se encontraron recursos");
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonBuscar;
+    private javax.swing.JComboBox<String> jComboBoxRecursos;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String categoria = this.jComboBoxRecursos.getSelectedItem().toString();
+        GuiEvent ge = new GuiEvent(this, 1);
+        ge.addParameter(categoria);
+        agente.postGuiEvent(ge);
+    }
 }

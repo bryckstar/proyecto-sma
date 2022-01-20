@@ -12,9 +12,9 @@ package smavark;
  */
 public class SMAVARK{
 
-    public void main(String[] args){
+    public static void main(String[] args){
         
-        String[] argsAgentes = {"-gui", "AgenteDetector:agentes.AgenteDetector", "AgenteGestor:agentes.AgenteGestor"};
+        String[] argsAgentes = {"-gui","Agente-Gestor:agentes.AgenteGestor; Agente-Detector:agentes.AgenteDetector" };
         jade.Boot.main(argsAgentes);
         
     }

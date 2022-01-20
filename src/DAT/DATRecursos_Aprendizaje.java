@@ -17,7 +17,7 @@ public class DATRecursos_Aprendizaje {
     DATConexion conectar = new DATConexion();
     
     public ResultSet consultarRA(String mensaje) throws SQLException, ClassNotFoundException{
-        String sql = "SELECT * FROM recurso WHERE titulo_recurso = '"
+        String sql = "SELECT * FROM recurso WHERE categoria = '"
                 +mensaje+ "':";
         PreparedStatement pst = conectar.AbrirConexion().prepareStatement(sql);
         ResultSet rs = pst.executeQuery();

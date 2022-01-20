@@ -21,7 +21,6 @@ public class RecursosAprendizaje {
     private String detalle_recurso = "";
     private String enlace_recurso = "";
     private String categoria = "";
-    private LeerRepositorioRA repositorio;
 
     public RecursosAprendizaje() {
     }
@@ -87,12 +86,5 @@ public class RecursosAprendizaje {
             System.out.println(e.getMessage());
         }
         return datos;
-    }
-    
-    public ArrayList<String> buscarRA(String recursosAprendizaje) throws FileNotFoundException{
-        repositorio = new LeerRepositorioRA();
-        repositorio.abrirArchivo("Repositorio de RA.txt");
-        ArrayList<String> lista = repositorio.leer_informacion(recursosAprendizaje);
-        return lista;
     }
 }
