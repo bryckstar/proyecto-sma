@@ -9,13 +9,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author PalaHZ
  */
-public class RecursosAprendizaje {
+public class RecursosAprendizaje implements Serializable{
     private int id_recurso = 0;
     private String titulo_recurso = "";
     private String detalle_recurso = "";

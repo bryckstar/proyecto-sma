@@ -15,14 +15,18 @@ public class DATConexion
     
     public static Connection getConnection() throws SQLException, ClassNotFoundException{
             String driver = "com.mysql.jdbc.Driver";
+            String user = "root";
+            String password=  "root";
             String url = "jdbc:mysql://localhost:3306/recursos_educativos";
             Class.forName(driver);
-            return DriverManager.getConnection(url,"root","root");
+            con = DriverManager.getConnection(url, user, password);
+            return con;
     };
     
     public Connection AbrirConexion() throws ClassNotFoundException, SQLException
     {
         con = getConnection();
+        System.out.println("FUNCIONA ESTA HUEVADA");
         return con;
     }
     
